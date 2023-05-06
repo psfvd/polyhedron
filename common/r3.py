@@ -42,6 +42,9 @@ class R3:
             self.z * other.x - self.x * other.z,
             self.x * other.y - self.y * other.x)
 
+    # Хорошая ли точка
+    def is_good(self):
+        return ((self.x)**2+(self.y)**2 > 1 and (self.x)**2+(self.y)**2 < 4)
 
 if __name__ == "__main__":
     x = R3(1.0, 1.0, 1.0)

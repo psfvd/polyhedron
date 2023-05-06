@@ -1,4 +1,4 @@
-from math import pi
+from math import pi, sqrt
 from functools import reduce
 from operator import add
 from common.r3 import R3
@@ -42,6 +42,16 @@ class Edge:
         self.beg, self.fin = beg, fin
         # Список «просветов»
         self.gaps = [Segment(Edge.SBEG, Edge.SFIN)]
+
+    # Является ли отрезок нехорошим?
+    def is_not_good(self, c):
+        return not(R3.is_good(self.beg * (1/c)) or R3.is_good(self.fin * (1/c)))
+
+    # Длина отрезка
+    def leng(self):
+        return sqrt((self.beg.x-self.fin.x)**2+
+                    (self.beg.y-self.fin.y)**2+
+                    (self.beg.z-self.fin.z)**2)
 
     # Учёт тени от одной грани
     def shadow(self, facet):
@@ -135,7 +145,7 @@ class Polyedr:
                     # обрабатываем первую строку; buf - вспомогательный массив
                     buf = line.split()
                     # коэффициент гомотетии
-                    c = float(buf.pop(0))
+                    self.c = float(buf.pop(0))
                     # углы Эйлера, определяющие вращение
                     alpha, beta, gamma = (float(x) * pi / 180.0 for x in buf)
                 elif i == 1:
@@ -145,7 +155,7 @@ class Polyedr:
                     # задание всех вершин полиэдра
                     x, y, z = (float(x) for x in line.split())
                     self.vertexes.append(R3(x, y, z).rz(
-                        alpha).ry(beta).rz(gamma) * c)
+                        alpha).ry(beta).rz(gamma) * self.c)
                 else:
                     # вспомогательный массив
                     buf = line.split()
@@ -158,6 +168,24 @@ class Polyedr:
                         self.edges.append(Edge(vertexes[n - 1], vertexes[n]))
                     # задание самой грани
                     self.facets.append(Facet(vertexes))
+
+    # Удаление дубликатов рёбер
+    def edges_uniq(self):
+        edges = {}
+        for e in self.edges:
+            if (e.beg, e.fin) not in edges and (e.fin, e.beg) not in edges:
+                edges[(e.beg, e.fin)] = e
+        self.edges = list(edges.values())
+
+    def sum_of_lens(self):
+        # Сумма длин нехороших ребер
+        s = 0
+        self.edges_uniq()
+        for e in self.edges:
+            # пересчет нехороших ребер
+            if e.is_not_good(self.c):
+                s += e.leng() / self.c
+        return s
 
     # Метод изображения полиэдра
     def draw(self, tk):
