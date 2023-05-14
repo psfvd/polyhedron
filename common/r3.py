@@ -20,6 +20,9 @@ class R3:
     def __mul__(self, k):
         return R3(k * self.x, k * self.y, k * self.z)
 
+    # def __eq__(self, other):
+    #     return self.x == other.x and self.y == other.y and self.z == other.z
+
     # Поворот вокруг оси Oz
     def rz(self, fi):
         return R3(
@@ -46,6 +49,7 @@ class R3:
     def is_good(self):
         return ((self.x)**2+(self.y)**2 > 1 and (self.x)**2+(self.y)**2 < 4)
 
+
 if __name__ == "__main__":
     x = R3(1.0, 1.0, 1.0)
     print("x", type(x), x.__dict__)
@@ -57,3 +61,4 @@ if __name__ == "__main__":
     print("u", type(u), u)
     v = x.cross(y)
     print("v", type(v), v.__dict__)
+    print([y, x] == [y, x])

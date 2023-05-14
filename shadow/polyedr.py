@@ -43,15 +43,22 @@ class Edge:
         # Список «просветов»
         self.gaps = [Segment(Edge.SBEG, Edge.SFIN)]
 
+    def __eq__(self, other):
+        return self.beg.x == other.beg.x and \
+            self.fin.x == other.fin.x and\
+            self.beg.y == other.beg.y and \
+            self.fin.y == other.fin.y
+
     # Является ли отрезок нехорошим?
     def is_not_good(self, c):
-        return not(R3.is_good(self.beg * (1/c)) or R3.is_good(self.fin * (1/c)))
+        return not (R3.is_good(self.beg * (1/c)) or
+                    R3.is_good(self.fin * (1/c)))
 
     # Длина отрезка
     def leng(self):
-        return sqrt((self.beg.x-self.fin.x)**2+
-                    (self.beg.y-self.fin.y)**2+
-                    (self.beg.z-self.fin.z)**2)
+        return sqrt((self.beg.x - self.fin.x) ** 2 +
+                    (self.beg.y - self.fin.y) ** 2 +
+                    (self.beg.z - self.fin.z) ** 2)
 
     # Учёт тени от одной грани
     def shadow(self, facet):

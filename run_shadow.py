@@ -7,7 +7,7 @@ from shadow.polyedr import Polyedr
 
 tk = TkDrawer()
 try:
-    for name in ["ccc", "cube", "box", "king", "cow"]:
+    for name in ["babem", "ccc", "cube", "box", "king", "cow"]:
         print("=============================================================")
         print(f"Начало работы с полиэдром '{name}'")
         start_time = time()
@@ -17,6 +17,6 @@ try:
         print(f"Изображение полиэдра '{name}' заняло {delta_time} сек.")
         print(f"Сумма длин нехороших ребер: {P.sum_of_lens()}")
         input("Hit 'Return' to continue -> ")
-except(EOFError, KeyboardInterrupt):
+except (EOFError, KeyboardInterrupt):
     print("\nStop")
     tk.close()
